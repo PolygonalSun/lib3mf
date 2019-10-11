@@ -101,7 +101,7 @@ function Main()
         if (!$NoMacOS)
         {
             $MacPaths = (
-            "${ENV:BUILD_SOURCESDIRECTORY}\build\Mac\Debug"
+            "${ENV:BUILD_SOURCESDIRECTORY}\build\macos\Debug"
             )
             
             StripSymbols $MacPaths
