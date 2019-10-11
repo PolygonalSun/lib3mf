@@ -53,6 +53,31 @@ function GenerateNuGetIOS()
 {
     nuget pack $PSScriptRoot/../build/ios/nuget/ios/lib3mf.ios.nuspec -OutputDirectory $PSScriptRoot/../build/nuget
 }
+function StripSymbols()
+{
+    Param
+    (
+        $Paths
+    )
+    
+    Write-Host "`n****** Strip Debug Symbols - Start  ******`n"
+
+    foreach($path in $Paths)
+    {
+        Write-Host "`tSearching path: $($path)"
+
+        $files = Get-ChildItem -Path $path -Recurse -File -Filter '*.a'
+
+        foreach($file in $files)
+        {
+            Write-Host "`t`tStripping symbols: $($file.Name)"
+
+            strip -S $file.FullName
+        }
+    }
+
+    Write-Host "`n****** Strip Debug Symbols - Finish ******`n"
+}
 
 function Main()
 {
@@ -81,6 +106,12 @@ function Main()
         # Only generate the iOS NuGet package if we built both IOS and Simulator
         if (!$NoIOS -and !$NoSimulator)
         {
+            $IOSPaths = (
+            "${ENV:BUILD_SOURCESDIRECTORY}\build\ios\Debug-iphoneos",
+            "${ENV:BUILD_SOURCESDIRECTORY}\build\ios_simulator\Debug-iphonesimulator"
+            )
+            
+            StripSymbols $IOSPaths
             GenerateNuGetIOS
         }
     }
