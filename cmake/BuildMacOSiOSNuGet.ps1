@@ -100,6 +100,11 @@ function Main()
     {
         if (!$NoMacOS)
         {
+            $MacPaths = (
+            "${ENV:BUILD_SOURCESDIRECTORY}\build\Mac\Debug"
+            )
+            
+            StripSymbols $MacPaths
             GenerateNuGetMacOS
         }
 
